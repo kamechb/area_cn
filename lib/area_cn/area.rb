@@ -23,7 +23,7 @@ module AreaCN
     end
 
     def children_names
-      @children_names ||= children.map(:name)
+      @children_names ||= children.map(&:name)
     end
 
     def children_codes
