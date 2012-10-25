@@ -4,7 +4,7 @@ module AreaCN
   class Area
     include Comparable
 
-    attr_reader :name, :children
+    attr_reader :name, :code, :children
     attr_accessor :parent
 
     # area is a json area from areas.json file
@@ -14,12 +14,8 @@ module AreaCN
       @children = []
     end
 
-    def code
-      @code.value
-    end
-
     def parent_code
-      @code.parent.code
+      @code.parent
     end
 
     def children_names
@@ -27,7 +23,7 @@ module AreaCN
     end
 
     def children_codes
-      @children_codes ||= children.map { |child| child.code }
+      @children_codes ||= children.map(&:code)
     end
 
     def province?
@@ -54,6 +50,9 @@ module AreaCN
       to_hash.to_json(*args)
     end
 
+    def inspect
+      to_hash
+    end
   end
 
   class Province < Area

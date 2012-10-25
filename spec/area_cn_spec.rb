@@ -49,7 +49,21 @@ describe AreaCN, "中国地区数据" do
   end
 
   describe AreaCN::Code do
-    it "code.prefix should return code's prefix" do
+    let(:code) { code = AreaCN::Code.new('110100') }
+      
+    it "code should behave like string" do
+      code.should == '110100'
+
+      code.should > '110000'
+
+      "code: #{code}".should == "code: 110100"
+    end
+
+    it "#value should return raw code string" do
+      code.value.should == '110100'
+    end
+
+    it "#prefix should return code's prefix" do
       code = AreaCN::Code.new("110000")
       code.prefix.should == '11'
 
@@ -63,24 +77,55 @@ describe AreaCN, "中国地区数据" do
       code.prefix.should == '1101'
     end
 
-    it "code parent" do
+    it "#parent should return parent code instance" do
       code = AreaCN::Code.new("110000")
+      code.parent.should == "000000"
       code.parent.should == AreaCN::Code.new("000000")
 
       AreaCN::Code.new("000000").parent.should == nil
     end
 
-    it "code ancestor" do
+    it "#ancestors" do
+      code.ancestors.should include("110100")
+      code.ancestors.should == ['110100', '110000', '000000']
+    end
+
+    it "code ancestor?" do
+      raw_code1 = '330101'
+      raw_code2 = '330100'
+      raw_code3 = '330000'
+
       code1 = AreaCN::Code.new("330101")
       code2 = AreaCN::Code.new("330100")
       code3 = AreaCN::Code.new("330000")
 
       code2.ancestor?(code1).should be_true
+      code2.ancestor?(raw_code1).should be_true
+
       code3.ancestor?(code2).should be_true
+      code3.ancestor?(raw_code2).should be_true
+
       code3.ancestor?(code1).should be_true
+      code3.ancestor?(raw_code1).should be_true
 
       code1.child?(code2).should be_true
       code1.child?(code3).should be_true
+    end
+
+    it "#child" do
+      raw_code1 = '330101'
+      raw_code2 = '330100'
+      raw_code3 = '330000'
+
+      code1 = AreaCN::Code.new("330101")
+      code2 = AreaCN::Code.new("330100")
+      code3 = AreaCN::Code.new("330000")
+
+      code1.child?(code2).should be_true
+      code1.child?(raw_code2).should be_true
+
+      code1.child?(code3).should be_true
+      code1.child?(raw_code3).should be_true
     end
 
     it "code should can be compare" do

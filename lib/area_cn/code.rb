@@ -1,13 +1,12 @@
 module AreaCN
-  class Code
-    include Comparable
-
+  class Code < String
     ROOT = "000000"
 
-    attr_accessor :code
+    attr_reader :code
 
     def initialize(code)
       @code = code
+      super(code)
     end
 
     def value
@@ -17,10 +16,10 @@ module AreaCN
     def prefix
       return if code == ROOT
       return @prefix if @prefix
-      code_prefix = code.sub(/0{2,4}$/, '') 
-      code_prefix << '0' if code_prefix.length.odd?
+      @prefix = code.sub(/0{2,4}$/, '') 
+      @prefix << '0' if @prefix.length.odd?
        
-      code_prefix 
+      @prefix 
     end
 
     def parent
@@ -31,10 +30,10 @@ module AreaCN
     def ancestors
       return @ancestors if @ancestors
       child = self
-      ancestors = [self] 
-      ancestors << child while child = child.parent 
+      @ancestors = [self] 
+      @ancestors << child while child = child.parent 
             
-      ancestors
+      @ancestors
     end
 
     def ancestor?(other)
@@ -43,20 +42,7 @@ module AreaCN
     end
 
     def child?(other)
-      other = Code.new(other) unless other.is_a?(Code)
-      other.ancestor?(self)
-    end
-
-    def <=>(other)
-      self.code <=> other.code
-    end
-
-    def inspect
-      @code
-    end
-
-    def to_s
-      @code
+      self.ancestors.include?(other)
     end
   end
 end

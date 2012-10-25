@@ -21,7 +21,23 @@ module AreaCN
     end
 
     def match(name, area_level = nil)
-      areas.mathc(name, area_level)
+      areas.match(name, area_level)
+    end
+
+    def provinces
+      areas.provinces
+    end
+
+    def cities
+      areas.cities
+    end
+
+    def districts
+      areas.districts
+    end
+
+    def all
+      areas.all
     end
   end
 end

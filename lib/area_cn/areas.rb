@@ -29,9 +29,9 @@ module AreaCN
 
     def find_by_code(code, area_level = nil)
       scope = area_level ? instance_variable_get("@#{area_level.to_s.pluralize}") : all
-      code_value = code.is_a?(Code) ? code.value : code
-      scope.detect { |area| area.code == code_value }
+      scope.detect { |area| area.code == code }
     end
+    alias_method :get, :find_by_code
 
     def match(name, area_level = nil)
       scope = area_level ? instance_variable_get("@#{area_level.to_s.pluralize}") : all
