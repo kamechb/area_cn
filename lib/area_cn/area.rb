@@ -51,7 +51,7 @@ module AreaCN
     end
 
     def inspect
-      to_hash
+      to_hash.inspect
     end
   end
 

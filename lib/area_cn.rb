@@ -19,6 +19,7 @@ module AreaCN
     def find_by_code(code, area_level = nil)
       areas.find_by_code(code, area_level)
     end
+    alias_method :get, :find_by_code
 
     def match(name, area_level = nil)
       areas.match(name, area_level)
