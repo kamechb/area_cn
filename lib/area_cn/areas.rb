@@ -14,6 +14,11 @@ module AreaCN
 
       @all = @provinces + @cities + @districts
 
+      @map = @all.inject({}) do |map, area|
+        map[area.code] = area
+        map
+      end
+
       locate_areas
     end
 
@@ -27,9 +32,13 @@ module AreaCN
       scope.detect { |area| area.name == name }
     end
 
+    # def find_by_code(code, area_level = nil)
+    #   scope = area_level ? instance_variable_get("@#{area_level.to_s.pluralize}") : all
+    #   scope.detect { |area| area.code == code }
+    # end
+
     def find_by_code(code, area_level = nil)
-      scope = area_level ? instance_variable_get("@#{area_level.to_s.pluralize}") : all
-      scope.detect { |area| area.code == code }
+      @map[code]
     end
     alias_method :get, :find_by_code
 
